@@ -1,0 +1,22 @@
+﻿--- Table: mention ---
+codement	libementar	libementfr
+1	متوسط	Passable
+2	قريب من الحسن	Assez bien
+3	حسن	Bien
+4	حسن جدا	Très bien
+
+--- Table: sanction ---
+idenelev	numesanc	codeperiexam	datesanc	codecatecaussanc	codetypecaussanc	codecaussanc	codetypesanc	proppar	codeetab	origcaussanc	nbrejoursanc	idimport
+
+--- Table: decicons ---
+codedeci	libedeciar	libedecifr	codedecisy
+1	يرتقي	Admis	1
+2	يرتقي بالإسعاف	Admis avec rachat	2
+3	يرسب	Redoublant	3
+4	يسعف بالرسوب	Redouble avec rachat	4
+5	يسعف بالتثليث	Dérogation triplet	5
+6	يرفت	Exclus	6
+7	يسعف بعد الرفت	Dérogué suite à exclusion	
+8	إنقطع	Abondonné	
+9	سنة بيضاء	Année blanche	
+

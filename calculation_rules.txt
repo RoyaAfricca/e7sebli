@@ -1,0 +1,34 @@
+﻿--- Table: typeepre ---
+codetypeepre	libetypeeprear	libetypeeprefr	abretypeeprear
+10	أنشطة مختلفة	Activités Diverses	أ.م.
+11	شفاهي	Oral	شف.
+12	أشغال تطبيقية	T.P	أ.ت.
+13	عدد للكرّاس	Note pour le cahier	كراس
+14	ملاحظة مستمرة	Observation continue	مل.م
+15	معدل الشفوي	Moyenne des oraux	مع.ش
+16	عدد مشروع 	Project Work	ع.مش
+20	إختبار كتابي	test 	ا.ك.
+21	اختبار نظري خصوصي	Culture et esprie sportive	ن.خص
+30	أحسن عدد فروض المراقبة	devoir de contrôle	ف.م.
+40	فرض تأليفي	Devoir de Synthese	ف.ت.
+41	إ.تطبيقي 	Test Th.Collect.	ا.تط
+50	امتحان وطني(نهاية مرحلة)	Examen national (fin cycle)	ا.و.
+17	ثقافة رياضية و الروح الأولمبية	Culture et esprie sportive	ثق.ر
+18	عدد منتوج	Note productivite	منتو
+19	عدد متابعة	Note Suivi	متاب
+31	أعلى عدد ف م 	Note supp DC	Supp
+42	أعلى عدد إ تطبيقي	Note supp DP	Supp
+23	اختبار تشكيلي	Test Artistique	ا.تش
+
+--- Table: parametre ---
+codeetab	codetypeetab	annescol	nomprendire	glbperiexam
+119850	32	2017/2016	فاتن غابري 	6
+
+--- Table: natumati ---
+codenatumati	libenatumatiar	libenatumatifr
+1	علمّية	Scientifique
+2	أدبيّة	Littéraire
+3	لغات	Langue
+4	 فنيّة	Artistique
+5	إعلامية	Informatique
+

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyceena Premium 3D Banner Final</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            background: #0f172a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+        }
+
+        .banner {
+            width: 900px;
+            height: 380px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #1a2d59; 
+            border-radius: 20px; /* Moins arrondi selon la réf */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        }
+
+        /* Arrière-plan décoratif (cercles de la photo) */
+        .decoration {
+            position: absolute;
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1;
+            animation: spinSlow 20s linear infinite;
+        }
+
+        @keyframes spinSlow {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        .dot-pink {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        .dot-pink:nth-child(2) {
+            width: 28px;
+            height: 28px;
+            background: #ff1e65;
+            box-shadow: 0 0 20px rgba(255, 30, 101, 0.6);
+            animation: floatDot1 3.5s ease-in-out infinite;
+        }
+
+        .dot-pink:nth-child(3) {
+            width: 18px;
+            height: 18px;
+            background: #ff4c8b;
+            box-shadow: 0 0 15px rgba(255, 30, 101, 0.5);
+            animation: floatDot2 2.8s ease-in-out infinite 0.6s;
+        }
+
+        .dot-cyan {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 2;
+            background: #39d6c3;
+            box-shadow: 0 0 15px rgba(57, 214, 195, 0.5);
+            animation: floatDot3 4s ease-in-out infinite 1s;
+        }
+
+        .dot-small {
+            position: absolute;
+            border-radius: 50%;
+            z-index: 2;
+            background: rgba(255,255,255,0.3);
+            animation: floatDot1 5s ease-in-out infinite 0.3s;
+        }
+
+        @keyframes floatDot1 {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            33% { transform: translateY(-14px) scale(1.1); }
+            66% { transform: translateY(7px) scale(0.95); }
+        }
+
+        @keyframes floatDot2 {
+            0%, 100% { transform: translateX(0px) translateY(0px) scale(1); }
+            40% { transform: translateX(10px) translateY(-10px) scale(1.15); }
+            70% { transform: translateX(-5px) translateY(5px) scale(0.9); }
+        }
+
+        @keyframes floatDot3 {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.8; }
+            50% { transform: translateY(-18px) scale(1.2); opacity: 1; }
+        }
+
+        /* Position des éléments 3D */
+        .student-wrapper {
+            position: absolute;
+            left: -30px;
+            bottom: -600px;
+            height: 115%;
+            z-index: 10;
+            animation: riseUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.2s;
+        }
+
+        .student-img {
+            height: 100%;
+            display: block;
+            /* lighten supprime les fonds sombres/navy */
+            mix-blend-mode: lighten;
+            filter: contrast(1.15) brightness(1.15);
+        }
+
+        @keyframes riseUp {
+            to { bottom: -30px; }
+        }
+
+        .laptop-wrapper {
+            position: absolute;
+            right: -500px;
+            bottom: -10px; /* Un peu plus bas */
+            width: 340px;
+            z-index: 8;
+            opacity: 0;
+            animation: slideInRight 1s ease-out forwards 0.9s, float 4s ease-in-out infinite 2s;
+        }
+
+        .laptop-img {
+            width: 100%;
+            /* multiply supprime les fonds BLANCS — parfait pour la vraie photo laptop */
+            mix-blend-mode: multiply;
+            filter: contrast(1.1) saturate(1.2);
+        }
+
+        @keyframes slideInRight {
+            from { right: -500px; opacity: 0; }
+            to { right: 270px; opacity: 1; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Contenu Texte (Aligné à droite) */
+        .content {
+            margin-right: 50px;
+            text-align: right;
+            color: white;
+            z-index: 20;
+            width: 450px;
+        }
+
+        .title {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            opacity: 1; /* JS contrôle le contenu */
+            min-height: 50px;
+        }
+
+        /* Curseur clignotant machine à écrire */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: white;
+            margin-right: 2px;
+            vertical-align: middle;
+            animation: blink 0.7s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0; }
+        }
+
+        .highlight-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-bottom: 25px;
+            opacity: 0;
+            animation-name: fadeIn;
+            animation-duration: 0.8s;
+            animation-delay: 1.8s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-out;
+        }
+
+        .pink-box {
+            background: #e91e63;
+            padding: 8px 25px;
+            border-radius: 10px;
+            font-size: 32px;
+            font-weight: 800;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .brand-text {
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .desc {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            opacity: 1; /* JS contrôle */
+            min-height: 55px;
+        }
+
+        /* Boutons */
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            opacity: 0;
+            margin-left: 100px; /* +1.5cm vers la droite */
+            animation-name: fadeIn;
+            animation-duration: 0.8s;
+            animation-delay: 2.4s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-out;
+        }
+
+        .btn {
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-cyan {
+            background: #2dd4bf;
+            color: #1a2d59;
+            box-shadow: 0 10px 20px rgba(45, 212, 191, 0.3);
+        }
+
+        .btn-white {
+            background: white;
+            color: #1a2d59;
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        /* Badge Admis (Style Pill précis de la photo) */
+        .admis-badge {
+            position: absolute;
+            left: 100px;
+            bottom: 40px;
+            background: rgba(235, 235, 235, 0.95);
+            padding: 5px 5px 5px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 30;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            /* 1) Entre avec popIn, puis 2) clignote en boucle */
+            animation-name: popIn, badgePulse;
+            animation-duration: 0.5s, 2s;
+            animation-delay: 3s, 3.6s;
+            animation-fill-mode: forwards, none;
+            animation-iteration-count: 1, infinite;
+            animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275), ease-in-out;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% {
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 0 0 rgba(233, 30, 99, 0);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 10px 30px rgba(233,30,99,0.4), 0 0 20px 6px rgba(233,30,99,0.25);
+                transform: scale(1.03);
+            }
+        }
+
+        .badge-blue { 
+            color: #1a2d59; 
+            font-weight: 800; 
+            font-size: 22px; 
+            white-space: nowrap;
+        }
+
+        .badge-pink { 
+            background: #e91e63; 
+            color: white; 
+            padding: 6px 20px; 
+            border-radius: 40px; 
+            font-weight: 800; 
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to   { transform: scale(1);   opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <!-- Décoration -->
+        <div class="decoration"></div>
+        <!-- Boules roses animées -->
+        <div class="dot-pink" style="left: 110px; top: 90px;"></div>
+        <div class="dot-pink" style="left: 310px; bottom: 90px;"></div>
+        <!-- Boule cyan -->
+        <div class="dot-cyan" style="width:20px; height:20px; right: 420px; top: 60px;"></div>
+        <!-- Petites boules blanches -->
+        <div class="dot-small" style="width:10px; height:10px; left: 200px; top: 50px;"></div>
+        <div class="dot-small" style="width:8px; height:8px; left: 380px; bottom: 50px;"></div>
+
+        <!-- Visuels 3D -->
+        <div class="student-wrapper">
+            <img src="./student_3d.png" class="student-img" alt="Student">
+        </div>
+
+        <div class="laptop-wrapper">
+            <img src="./laptop_3d.png" class="laptop-img" alt="Laptop">
+        </div>
+
+        <!-- Badge Admis bas gauche (Style Pill) -->
+        <div class="admis-badge">
+            <span class="badge-blue">خليها علينا</span>
+            <span class="badge-pink"><span>الـ</span><span>Admis</span></span>
+        </div>
+
+        <!-- Contenu -->
+        <div class="content">
+            <div class="title" id="typewriter-title"><span class="cursor"></span></div>
+            
+            <div class="highlight-container">
+                <div class="brand-text">ليســينا..</div>
+                <div class="pink-box">طريقك للتفوق</div>
+            </div>
+
+            <div class="desc" id="typewriter-desc"><span class="cursor"></span></div>
+
+            <div class="buttons">
+                <a href="https://lyceena.tn/#ContactUs" target="_blank" class="btn btn-white">إتصل بنا</a>
+                <a href="https://student.lyceena.tn/register" target="_blank" class="btn btn-cyan">سجل مجانًا الآن</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ─── Responsive Scaling ───
+    function scaleBanner() {
+        if (!document.body) return;
+        const banner = document.querySelector('.banner');
+        const viewWidth = document.body.clientWidth;
+        const viewHeight = document.body.clientHeight;
+        
+        // Exact mathematical scale
+        let scaleX = viewWidth / 900;
+        let scaleY = viewHeight / 380;
+        let scale = Math.min(scaleX, scaleY);
+        
+        // Absolute centering without layout flow
+        const scaledW = 900 * scale;
+        const scaledH = 380 * scale;
+        const offsetX = (viewWidth - scaledW) / 2;
+        const offsetY = (viewHeight - scaledH) / 2;
+        
+        // Apply transform origin top left for manual coordinate translation
+        banner.style.transformOrigin = '0 0';
+        banner.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    }
+    
+    const ro = new ResizeObserver(() => {
+        window.requestAnimationFrame(scaleBanner);
+    });
+    ro.observe(document.documentElement);
+    
+    scaleBanner();
+
+    // ─── Typewriter 1: Title ───
+    const titleEl = document.getElementById('typewriter-title');
+    const titleText = 'تجربة تعليمية متكاملة';
+    let i = 0;
+
+    function typeTitle() {
+        if (i <= titleText.length) {
+            titleEl.innerHTML = titleText.slice(0, i) + '<span class="cursor"></span>';
+            i++;
+            setTimeout(typeTitle, 80);
+        } else {
+            // Title done — remove cursor and start desc after short pause
+            titleEl.innerHTML = titleText;
+            setTimeout(typeDesc, 400);
+        }
+    }
+
+    // ─── Typewriter 2: Description ───
+    const descEl = document.getElementById('typewriter-desc');
+    const descText = 'نوفر تجربة تعليمية متكاملة عبر منصتنا للتعليم عن بعد، في مختلف المواد للتلاميذ من الأولى ثانوي إلى البكالوريا.';
+    let j = 0;
+
+    function typeDesc() {
+        if (j <= descText.length) {
+            descEl.innerHTML = descText.slice(0, j) + '<span class="cursor"></span>';
+            j++;
+            setTimeout(typeDesc, 35); // Faster for long text
+        } else {
+            // Desc done — remove cursor, keep text
+            descEl.innerHTML = descText;
+        }
+    }
+
+    // Start title typewriter after 1.5s
+    setTimeout(typeTitle, 1500);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>E7sebli — احسب معدلك | حاسبة المعدل في تونس</title>
+<meta name="description" content="تطبيق تونسي لحساب المعدل المدرسي للإعدادية والثانوية — مجاني، سريع، دقيق"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800;900&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pink:#f51e65;--cyan:#39d6c3;--sky:#38bdf8;--navy:#0f172a;--navy2:#1a2d59;
+  --glass:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.08);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Tajawal',sans-serif;
+  background:var(--navy);color:#fff;
+  overflow-x:hidden;direction:rtl;
+}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* ── NAVBAR ── */
+nav{
+  position:fixed;top:0;width:100%;z-index:100;
+  padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(15,23,42,0.8);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  transition:all .3s ease;
+}
+.nav-logo{
+  font-family:'Outfit',sans-serif;font-weight:900;font-size:24px;
+  background:linear-gradient(135deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:rgba(255,255,255,.6);text-decoration:none;font-size:14px;font-weight:700;transition:.2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{
+  background:linear-gradient(135deg,var(--pink),#c0134d);
+  color:#fff;border:none;padding:10px 24px;border-radius:999px;
+  font-family:'Tajawal',sans-serif;font-weight:800;font-size:14px;cursor:pointer;
+  box-shadow:0 0 20px rgba(245,30,101,.4);transition:all .3s;
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(245,30,101,.6)}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:1}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:120px 24px 60px;
+  background:radial-gradient(ellipse 80% 60% at 50% 20%,rgba(26,45,89,.8) 0%,transparent 70%);
+}
+.hero-inner{max-width:900px;width:100%;text-align:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(57,214,195,.1);border:1px solid rgba(57,214,195,.25);
+  border-radius:999px;padding:6px 18px;margin-bottom:32px;
+}
+.hero-badge span{font-size:12px;font-weight:700;color:var(--cyan);letter-spacing:.15em;text-transform:uppercase}
+.hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
+
+.hero-logo{
+  width:150px;height:150px;border-radius:50%;margin:0 auto 32px;
+  position:relative;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  box-shadow:0 0 40px rgba(245,30,101,.5),0 0 80px rgba(57,214,195,.3);
+}
+.hero-logo-ring{
+  position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--pink),var(--cyan),var(--sky),var(--pink));
+  animation:spin 3s linear infinite;
+}
+.hero-logo-inner{
+  position:absolute;inset:4px;border-radius:50%;
+  background:var(--navy);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:32px;font-weight:900;
+  background:linear-gradient(135deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.hero-title{
+  font-family:'Outfit',sans-serif;font-size:clamp(48px,8vw,90px);
+  font-weight:900;line-height:1;letter-spacing:-2px;
+  background:linear-gradient(135deg,#fff 0%,rgba(255,255,255,.7) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:16px;
+}
+.hero-sub{font-size:clamp(22px,4vw,36px);font-weight:800;color:var(--cyan);margin-bottom:24px}
+.hero-desc{font-size:16px;color:rgba(255,255,255,.5);max-width:560px;margin:0 auto 48px;line-height:1.8}
+
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+.btn-main{
+  display:flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,var(--pink),#c0134d);
+  color:#fff;padding:16px 36px;border-radius:999px;border:none;
+  font-family:'Tajawal',sans-serif;font-weight:800;font-size:17px;cursor:pointer;
+  box-shadow:0 0 30px rgba(245,30,101,.5);transition:all .3s;text-decoration:none;
+}
+.btn-main:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(245,30,101,.7)}
+.btn-sec{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(57,214,195,.1);border:1.5px solid rgba(57,214,195,.3);
+  color:var(--cyan);padding:16px 36px;border-radius:999px;
+  font-family:'Tajawal',sans-serif;font-weight:800;font-size:17px;cursor:pointer;
+  transition:all .3s;text-decoration:none;
+}
+.btn-sec:hover{background:rgba(57,214,195,.15);transform:translateY(-3px)}
+
+/* ── PHONE MOCKUP ── */
+.phone-wrap{
+  perspective:1200px;display:flex;justify-content:center;
+  animation:float 5s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.phone{
+  width:260px;
+  background:rgba(15,23,42,.9);border-radius:40px;
+  border:2px solid rgba(255,255,255,.1);
+  box-shadow:0 40px 80px rgba(0,0,0,.6), 0 0 60px rgba(57,214,195,.15), inset 0 1px 0 rgba(255,255,255,.1);
+  overflow:hidden;
+  transform:rotateY(-10deg) rotateX(5deg);
+  transition:transform .5s ease;
+}
+.phone:hover{transform:rotateY(0deg) rotateX(0deg)}
+.phone-screen{padding:24px 20px;min-height:460px}
+.phone-notch{width:60px;height:5px;background:rgba(255,255,255,.15);border-radius:99px;margin:0 auto 20px}
+.phone-app-title{
+  font-family:'Outfit',sans-serif;font-weight:900;font-size:28px;text-align:center;
+  background:linear-gradient(135deg,#fff,rgba(255,255,255,.7));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;
+}
+.phone-tag{
+  background:rgba(57,214,195,.1);border:1px solid rgba(57,214,195,.2);
+  border-radius:99px;padding:3px 12px;font-size:9px;font-weight:700;
+  color:var(--cyan);letter-spacing:.15em;text-transform:uppercase;display:block;text-align:center;margin-bottom:24px;
+}
+.phone-btn{
+  display:block;width:100%;padding:18px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(57,214,195,.15),rgba(57,214,195,.05));
+  border:1.5px solid rgba(57,214,195,.2);color:#fff;
+  font-family:'Tajawal',sans-serif;font-weight:800;font-size:16px;text-align:right;
+  margin-bottom:12px;cursor:pointer;
+}
+.phone-btn2{
+  display:block;width:100%;padding:18px;border-radius:16px;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);
+  color:rgba(255,255,255,.7);font-family:'Tajawal',sans-serif;font-weight:800;font-size:16px;text-align:right;margin-bottom:24px;
+}
+.phone-score{
+  text-align:center;padding:24px;
+  background:radial-gradient(circle,rgba(57,214,195,.08),transparent 70%);
+  border:2px solid var(--cyan);border-radius:50%;width:120px;height:120px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto;
+  box-shadow:0 0 30px rgba(57,214,195,.3);
+}
+.phone-score-val{font-family:'Outfit',sans-serif;font-size:34px;font-weight:900;color:var(--cyan)}
+.phone-score-lbl{font-size:9px;opacity:.4;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+
+/* ── STATS ── */
+.stats{
+  display:flex;justify-content:center;gap:48px;flex-wrap:wrap;
+  padding:48px 24px;background:rgba(255,255,255,.02);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.stat{text-align:center}
+.stat-num{
+  font-family:'Outfit',sans-serif;font-size:42px;font-weight:900;
+  background:linear-gradient(135deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.stat-lbl{font-size:13px;color:rgba(255,255,255,.4);font-weight:700;margin-top:4px}
+
+/* ── FEATURES ── */
+#features{padding:100px 24px}
+.section-label{text-align:center;margin-bottom:16px}
+.section-label span{
+  font-size:11px;font-weight:700;color:var(--cyan);
+  letter-spacing:.2em;text-transform:uppercase;
+  background:rgba(57,214,195,.08);border:1px solid rgba(57,214,195,.2);
+  padding:5px 16px;border-radius:999px;
+}
+.section-title{
+  text-align:center;font-size:clamp(28px,4vw,44px);
+  font-weight:900;margin-bottom:60px;
+}
+.features-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:24px;max-width:1100px;margin:0 auto;
+}
+.feat-card{
+  background:var(--glass);border:1px solid var(--border);border-radius:28px;
+  padding:36px 28px;transition:all .4s ease;
+  transform-style:preserve-3d;cursor:default;position:relative;overflow:hidden;
+}
+.feat-card::before{
+  content:'';position:absolute;inset:0;border-radius:28px;
+  background:radial-gradient(circle at 30% 30%,rgba(57,214,195,.06),transparent 60%);
+  opacity:0;transition:.4s;
+}
+.feat-card:hover{
+  transform:translateY(-8px) rotateX(3deg);
+  border-color:rgba(57,214,195,.3);
+  box-shadow:0 30px 60px rgba(0,0,0,.4),0 0 40px rgba(57,214,195,.1);
+}
+.feat-card:hover::before{opacity:1}
+.feat-icon{
+  width:60px;height:60px;border-radius:18px;margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+}
+.feat-icon.pink{background:rgba(245,30,101,.12);border:1px solid rgba(245,30,101,.2)}
+.feat-icon.cyan{background:rgba(57,214,195,.12);border:1px solid rgba(57,214,195,.2)}
+.feat-icon.sky{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.2)}
+.feat-icon.purple{background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.2)}
+.feat-icon.gold{background:rgba(255,204,0,.12);border:1px solid rgba(255,204,0,.2)}
+.feat-icon.green{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.2)}
+.feat-title{font-size:19px;font-weight:800;margin-bottom:10px}
+.feat-desc{font-size:14px;color:rgba(255,255,255,.45);line-height:1.7}
+
+/* ── HOW IT WORKS ── */
+#how{padding:100px 24px;background:rgba(255,255,255,.01)}
+.steps{display:flex;flex-direction:column;gap:0;max-width:700px;margin:0 auto;position:relative}
+.steps::before{
+  content:'';position:absolute;right:27px;top:40px;bottom:40px;width:2px;
+  background:linear-gradient(to bottom,var(--pink),var(--cyan));opacity:.2;
+}
+.step{display:flex;gap:24px;align-items:flex-start;padding:28px 0;position:relative}
+.step-num{
+  width:55px;height:55px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-size:20px;font-weight:900;
+  box-shadow:0 0 20px rgba(57,214,195,.3);z-index:1;
+}
+.step-num.s1{background:linear-gradient(135deg,var(--pink),#c0134d);box-shadow:0 0 20px rgba(245,30,101,.4)}
+.step-num.s2{background:linear-gradient(135deg,var(--sky),#0369a1);box-shadow:0 0 20px rgba(56,189,248,.4)}
+.step-num.s3{background:linear-gradient(135deg,var(--cyan),#0d9488);box-shadow:0 0 20px rgba(57,214,195,.4)}
+.step-num.s4{background:linear-gradient(135deg,#8b5cf6,#5b21b6);box-shadow:0 0 20px rgba(139,92,246,.4)}
+.step-content{padding-top:10px}
+.step-title{font-size:19px;font-weight:800;margin-bottom:6px}
+.step-desc{font-size:14px;color:rgba(255,255,255,.45);line-height:1.7}
+
+/* ── LEVELS ── */
+#levels{padding:100px 24px}
+.levels-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;max-width:900px;margin:0 auto}
+.level-card{
+  border-radius:28px;padding:40px 36px;border:1.5px solid;
+  transition:all .4s;cursor:pointer;position:relative;overflow:hidden;
+}
+.level-card.college{
+  background:linear-gradient(135deg,rgba(57,214,195,.08),rgba(57,214,195,.02));
+  border-color:rgba(57,214,195,.2);
+}
+.level-card.lycee{
+  background:linear-gradient(135deg,rgba(56,189,248,.08),rgba(56,189,248,.02));
+  border-color:rgba(56,189,248,.2);
+}
+.level-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.level-card.college:hover{border-color:rgba(57,214,195,.5);box-shadow:0 30px 60px rgba(0,0,0,.3),0 0 40px rgba(57,214,195,.1)}
+.level-card.lycee:hover{border-color:rgba(56,189,248,.5);box-shadow:0 30px 60px rgba(0,0,0,.3),0 0 40px rgba(56,189,248,.1)}
+.level-emoji{font-size:42px;margin-bottom:20px}
+.level-name{font-size:26px;font-weight:900;margin-bottom:8px}
+.level-name.c{color:var(--cyan)}
+.level-name.l{color:var(--sky)}
+.level-sub{font-size:14px;color:rgba(255,255,255,.4);line-height:1.6}
+.level-count{
+  display:inline-block;margin-top:16px;padding:4px 14px;border-radius:99px;
+  font-size:11px;font-weight:700;letter-spacing:.1em;
+}
+.level-count.c{background:rgba(57,214,195,.1);border:1px solid rgba(57,214,195,.2);color:var(--cyan)}
+.level-count.l{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);color:var(--sky)}
+
+
+/* ── DOWNLOAD ── */
+#download{padding:120px 24px}
+.download-inner{
+  max-width:800px;margin:0 auto;text-align:center;
+  background:linear-gradient(135deg,rgba(245,30,101,.08),rgba(57,214,195,.08));
+  border:1px solid rgba(255,255,255,.08);border-radius:40px;padding:72px 48px;
+  position:relative;overflow:hidden;
+}
+.download-inner::before{
+  content:'';position:absolute;top:-100px;right:-100px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,30,101,.15),transparent 70%);
+}
+.download-inner::after{
+  content:'';position:absolute;bottom:-100px;left:-100px;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(57,214,195,.12),transparent 70%);
+}
+.download-title{font-size:clamp(28px,4vw,48px);font-weight:900;margin-bottom:16px;position:relative;z-index:1}
+.download-sub{font-size:16px;color:rgba(255,255,255,.45);margin-bottom:40px;position:relative;z-index:1;line-height:1.7}
+.download-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.btn-apk{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,var(--pink),#c0134d);
+  color:#fff;padding:18px 40px;border-radius:999px;border:none;
+  font-family:'Tajawal',sans-serif;font-weight:800;font-size:18px;cursor:pointer;
+  box-shadow:0 0 40px rgba(245,30,101,.5);transition:all .3s;text-decoration:none;
+  animation:glow 3s ease-in-out infinite;
+}
+@keyframes glow{0%,100%{box-shadow:0 0 30px rgba(245,30,101,.5)}50%{box-shadow:0 0 60px rgba(245,30,101,.8)}}
+.btn-apk:hover{transform:translateY(-4px) scale(1.03)}
+.btn-github{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.15);
+  color:#fff;padding:18px 40px;border-radius:999px;
+  font-family:'Tajawal',sans-serif;font-weight:800;font-size:18px;cursor:pointer;
+  transition:all .3s;text-decoration:none;
+}
+.btn-github:hover{background:rgba(255,255,255,.1);transform:translateY(-4px)}
+
+/* ── FOOTER ── */
+footer{
+  padding:48px 24px;border-top:1px solid var(--border);text-align:center;
+  background:rgba(0,0,0,.2);
+}
+.footer-logo{
+  font-family:'Outfit',sans-serif;font-size:32px;font-weight:900;
+  background:linear-gradient(135deg,var(--pink),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+}
+.footer-sub{font-size:14px;color:rgba(255,255,255,.3);margin-bottom:24px}
+.footer-links{display:flex;gap:28px;justify-content:center;flex-wrap:wrap}
+.footer-links a{color:rgba(255,255,255,.3);text-decoration:none;font-size:13px;font-weight:700;transition:.2s}
+.footer-links a:hover{color:#fff}
+.footer-copy{margin-top:32px;font-size:12px;color:rgba(255,255,255,.15)}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(40px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.shown{opacity:1;transform:translateY(0)}
+
+@media(max-width:640px){
+  .levels-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hero-btns{flex-direction:column;align-items:center}
+  .download-btns{flex-direction:column;align-items:center}
+  .download-inner{padding:48px 24px}
+  .steps::before{right:27px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <ul class="nav-links">
+    <li><a href="#features">المميزات</a></li>
+    <li><a href="#how">كيف يعمل</a></li>
+    <li><a href="#levels">المستويات</a></li>
+    <li><a href="#download">تحميل</a></li>
+  </ul>
+  <div class="nav-logo">e7sebli</div>
+  <button class="nav-cta" onclick="scrollTo({top:document.getElementById('download').offsetTop,behavior:'smooth'})">📲 تحميل التطبيق</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      <span>تونس • 2025-2026 • مجاني 100%</span>
+    </div>
+
+    <div class="hero-logo">
+      <div class="hero-logo-ring"></div>
+      <div class="hero-logo-inner">E7</div>
+    </div>
+
+    <h1 class="hero-title">e7sebli</h1>
+    <div class="hero-sub">احسب معدلك في ثوانٍ</div>
+    <p class="hero-desc">
+      التطبيق التونسي الأول لحساب المعدل المدرسي للإعدادية والثانوية — 
+      دقيق، سريع، ومطابق لنظام وزارة التربية 2025/2026
+    </p>
+
+    <div class="hero-btns">
+      <a href="#download" class="btn-main">
+        <span>📲</span> تحميل مجاناً
+      </a>
+      <a href="#features" class="btn-sec">
+        <span>✨</span> اكتشف المميزات
+      </a>
+    </div>
+
+    <!-- Phone mockup -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="phone-app-title">e7sebli</div>
+          <div class="phone-tag">تونس • 2025-2026</div>
+          <div class="phone-btn">🏫 المرحلة الإعدادية</div>
+          <div class="phone-btn2">🎓 المرحلة الثانوية</div>
+          <div class="phone-score">
+            <div class="phone-score-val">15.42</div>
+            <div class="phone-score-lbl">المعدل</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat reveal">
+    <div class="stat-num">100%</div>
+    <div class="stat-lbl">مجاني دائماً</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">6</div>
+    <div class="stat-lbl">مستويات إعدادية</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">12+</div>
+    <div class="stat-lbl">شعبة ثانوية</div>
+  </div>
+  <div class="stat reveal">
+    <div class="stat-num">3</div>
+    <div class="stat-lbl">ثلاثيات</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label reveal"><span>✦ المميزات</span></div>
+  <h2 class="section-title reveal">كل ما تحتاجه في تطبيق واحد</h2>
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <div class="feat-icon pink">🎯</div>
+      <div class="feat-title">حساب دقيق 100%</div>
+      <div class="feat-desc">صيغ مطابقة تماماً لتعليمات وزارة التربية التونسية — بتر عشري صارم دون تقريب</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon cyan">⚡</div>
+      <div class="feat-title">نتيجة فورية</div>
+      <div class="feat-desc">أدخل أعدادك وشاهد المعدل يُحسب لحظياً مع تقدم تلقائي بين المواد</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon sky">🏆</div>
+      <div class="feat-title">لوحة الشرف والمراتب</div>
+      <div class="feat-desc">يُظهر التطبيق لوحة الامتياز، شهادة الشرف، الإنذار أو التوبيخ تلقائياً</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon purple">🗓️</div>
+      <div class="feat-title">المعدل السنوي</div>
+      <div class="feat-desc">احسب معدل الثلاثي 3 مع قاعدة 1-2-2 وقرار الارتقاء أو الإسعاف في الثانوية</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon gold">⚖️</div>
+      <div class="feat-title">نظام الإعفاء</div>
+      <div class="feat-desc">دعم كامل للمواد المعفى منها — تُستثنى تلقائياً من الحساب</div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon green">📱</div>
+      <div class="feat-title">يعمل بدون إنترنت</div>
+      <div class="feat-desc">تطبيق Android يعمل 100% offline — لا تسجيل، لا اشتراك، لا إعلانات مزعجة</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-label reveal"><span>✦ كيف يعمل</span></div>
+  <h2 class="section-title reveal">4 خطوات فقط</h2>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num s1">1</div>
+      <div class="step-content">
+        <div class="step-title">اختر المرحلة الدراسية</div>
+        <div class="step-desc">إعدادية أو ثانوية — حدد السنة والشعبة</div>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num s2">2</div>
+      <div class="step-content">
+        <div class="step-title">حدد الثلاثي</div>
+        <div class="step-desc">الأول، الثاني، أو الثالث — التطبيق يتكيف مع القواعد الخاصة بكل ثلاثي</div>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num s3">3</div>
+      <div class="step-content">
+        <div class="step-title">أدخل الأعداد</div>
+        <div class="step-desc">واجهة بطاقات أو قائمة — شفاهي، مراقبة، تأليفي، تطبيقي حسب كل مادة</div>
+      </div>
+    </div>
+    <div class="step reveal">
+      <div class="step-num s4">4</div>
+      <div class="step-content">
+        <div class="step-title">شاهد نتيجتك</div>
+        <div class="step-desc">معدل الثلاثي + المعدل السنوي + قرار المجلس كلها دفعة واحدة</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEVELS -->
+<section id="levels">
+  <div class="section-label reveal"><span>✦ المستويات</span></div>
+  <h2 class="section-title reveal">يغطي كل المراحل</h2>
+  <div class="levels-grid">
+    <div class="level-card college reveal">
+      <div class="level-emoji">🏫</div>
+      <div class="level-name c">المرحلة الإعدادية</div>
+      <div class="level-sub">السابعة، الثامنة، التاسعة — كل المواد وفق البرنامج التونسي 2025/2026</div>
+      <span class="level-count c">6 مستويات</span>
+    </div>
+    <div class="level-card lycee reveal">
+      <div class="level-emoji">🎓</div>
+      <div class="level-name l">المرحلة الثانوية</div>
+      <div class="level-sub">الأولى، الثانية، الثالثة، الرابعة — جميع المسارات والشعب مع ضوارب محددة</div>
+      <span class="level-count l">12+ شعبة</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- DOWNLOAD -->
+<section id="download">
+  <div class="download-inner reveal">
+    <div class="download-title">📲 حمّل التطبيق الآن</div>
+    <div class="download-sub">
+      مجاني — خفيف — يعمل بدون إنترنت<br/>
+      متوفر على Android لجميع الأجهزة
+    </div>
+    <div class="download-btns">
+      <a href="https://github.com/RoyaAfricca/e7sebli/releases/latest" class="btn-apk" target="_blank">
+        <span>⬇️</span> تحميل APK
+      </a>
+      <a href="https://github.com/RoyaAfricca/e7sebli" class="btn-github" target="_blank">
+        <span>💻</span> GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">e7sebli</div>
+  <div class="footer-sub">حاسبة المعدل التونسية — 2025/2026</div>
+  <div class="footer-links">
+    <a href="#features">المميزات</a>
+    <a href="#how">كيف يعمل</a>
+    <a href="#levels">المستويات</a>
+    <a href="https://github.com/RoyaAfricca/e7sebli" target="_blank">GitHub</a>
+  </div>
+  <div class="footer-copy">صُنع بـ ❤️ في تونس — مشروع مفتوح المصدر</div>
+</footer>
+
+<script>
+// ── THREE.JS PARTICLES ──────────────────────────────────────
+(function(){
+  const canvas = document.getElementById('bg-canvas');
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.z = 5;
+
+  // 3D Spheres (Planets)
+  const count = 300;
+  const geo = new THREE.SphereGeometry(1, 16, 16);
+  const mat = new THREE.MeshStandardMaterial({ metalness: 0.2, roughness: 0.5 });
+  const mesh = new THREE.InstancedMesh(geo, mat, count);
+  const dummy = new THREE.Object3D();
+  const color = new THREE.Color();
+  
+  const palette = [
+    [0.96,0.12,0.40], // pink
+    [0.22,0.84,0.76], // cyan
+    [0.22,0.74,0.98], // sky
+    [0.55,0.36,0.96]  // purple
+  ];
+  
+  for(let i=0;i<count;i++){
+    dummy.position.set((Math.random()-0.5)*25, (Math.random()-0.5)*25, (Math.random()-0.5)*12);
+    const scale = Math.random() * 0.05 + 0.02;
+    dummy.scale.set(scale, scale, scale);
+    dummy.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+    dummy.updateMatrix();
+    mesh.setMatrixAt(i, dummy.matrix);
+    
+    const c = palette[Math.floor(Math.random()*palette.length)];
+    color.setRGB(c[0], c[1], c[2]);
+    mesh.setColorAt(i, color);
+  }
+  scene.add(mesh);
+
+  const ambLight = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambLight);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(10,20,10);
+  scene.add(dirLight);
+
+  // Mouse parallax
+  let mx=0,my=0;
+  window.addEventListener('mousemove',e=>{
+    mx=(e.clientX/window.innerWidth-.5)*2;
+    my=-(e.clientY/window.innerHeight-.5)*2;
+  });
+
+  window.addEventListener('resize',()=>{
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  });
+
+  (function animate(){
+    requestAnimationFrame(animate);
+    mesh.rotation.y += 0.0008;
+    mesh.rotation.x += 0.0003;
+    camera.position.x += (mx*0.3 - camera.position.x)*0.05;
+    camera.position.y += (my*0.3 - camera.position.y)*0.05;
+    renderer.render(scene,camera);
+  })();
+})();
+
+// ── SCROLL REVEAL ────────────────────────────────────────────
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('shown'); obs.unobserve(e.target); }});
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── NAVBAR SHADOW ON SCROLL ──────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const nav = document.getElementById('navbar');
+  nav.style.background = window.scrollY > 20
+    ? 'rgba(15,23,42,0.95)' : 'rgba(15,23,42,0.8)';
+});
+
+// ── PHONE 3D TILT ON MOUSE ───────────────────────────────────
+const phone = document.querySelector('.phone');
+document.addEventListener('mousemove',e=>{
+  if(!phone) return;
+  const x = (e.clientX/window.innerWidth - 0.5)*20;
+  const y = -(e.clientY/window.innerHeight - 0.5)*12;
+  phone.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+});
+</script>
+</body>
+</html>

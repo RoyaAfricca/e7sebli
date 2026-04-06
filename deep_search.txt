@@ -1,0 +1,14 @@
+﻿Table classe contains 7 records for target levels.
+Table epreuve contains 6663 records for target levels.
+Table moyemati contains 1586 records for target levels.
+Table moyematiante contains 6912 records for target levels.
+Table nivescol contains 6 records for target levels.
+Table noteelev contains 22173 records for target levels.
+Table progense contains 125 records for target levels.
+Table classe contains 7 records for target levels.
+Table epreuve contains 6663 records for target levels.
+Table moyemati contains 1586 records for target levels.
+Table moyematiante contains 6912 records for target levels.
+Table nivescol contains 6 records for target levels.
+Table noteelev contains 22173 records for target levels.
+Table progense contains 125 records for target levels.
