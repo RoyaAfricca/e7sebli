@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">e7sebli</string>
-    <string name="title_activity_main">e7sebli</string>
-    <string name="package_name">com.e7sebli.app</string>
-    <string name="custom_url_scheme">com.e7sebli.app</string>
-</resources>
