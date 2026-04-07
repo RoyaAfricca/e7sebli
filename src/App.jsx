@@ -226,7 +226,7 @@ const Step0_Level = ({ onSelect, onTargetSelect }) => {
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(57,214,195,0.2)'; e.currentTarget.style.background = 'rgba(57,214,195,0.05)'; }}>
             <Download size={18} />
             <span style={{ fontSize: 14, fontWeight: 900 }}>تنزيل تطبيق الأندرويد (APK)</span>
-          </a>
+          </E7sebli-v1.0.4.apk>
         </motion.div>
       ) : (
         <motion.div variants={itemVariants} initial="hidden" animate="visible" className="flex flex-col gap-4 w-full">
