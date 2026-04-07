@@ -209,24 +209,7 @@ const Step0_Level = ({ onSelect, onTargetSelect }) => {
             <ChevronLeft size={20} style={{ color: '#ffcc00' }} />
           </button>
 
-          {/* Download APK Button */}
-          <a
-            href="https://github.com/RoyaAfricca/e7sebli/releases/download/v1.0.0/E7sebli-v1.0.0.apk"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              width: '100%', padding: '14px 20px', borderRadius: 16, marginTop: 16,
-              border: '1.5px solid rgba(57, 214, 195, 0.2)',
-              background: 'rgba(57, 214, 195, 0.05)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#39d6c3', cursor: 'pointer', transition: 'all 0.25s ease',
-              textDecoration: 'none', gap: 10
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(57,214,195,0.5)'; e.currentTarget.style.background = 'rgba(57,214,195,0.1)'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(57,214,195,0.2)'; e.currentTarget.style.background = 'rgba(57,214,195,0.05)'; }}>
-            <Download size={18} />
-            <span style={{ fontSize: 14, fontWeight: 900 }}>تنزيل تطبيق الأندرويد (APK)</span>
-          </E7sebli-v1.0.4.apk>
+     
         </motion.div>
       ) : (
         <motion.div variants={itemVariants} initial="hidden" animate="visible" className="flex flex-col gap-4 w-full">
